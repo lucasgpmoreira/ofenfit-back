@@ -72,7 +72,11 @@ public class ClienteController {
             @RequestParam(required = false) String nome,
             @RequestParam(required = false) String cpf) {
 
-        List<ClienteModel> clientes = clienteRepository.findByNomeContainingIgnoreCaseOrCpf(nome, cpf);
+        // Se o nome for vazio ou null, passamos null para a query personalizada
+        nome = (nome != null && !nome.isEmpty()) ? nome : null;
+        cpf = (cpf != null && !cpf.isEmpty()) ? cpf : null;
+
+        List<ClienteModel> clientes = clienteRepository.buscarPorNomeOuCpf(nome, cpf);
         if (!clientes.isEmpty()) {
             return ResponseEntity.ok(clientes);
         } else {
